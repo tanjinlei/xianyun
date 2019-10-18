@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import { async } from "q";
 export default {
   data() {
     return {
@@ -39,33 +38,20 @@ export default {
   },
   methods: {
     // 提交登录
-    hanleLoginSubmit() {
-      this.$refs.form.validate(async valid => {
-        console.log(valid);
-        if (valid) {
-          var res = await this.$axios({
-            url: "/accounts/login",
-            method: "POST",
-            data: this.form
-          });
+        handleLoginSubmit(){
+           this.$refs.form.validate(async valid => {
+               // valid是表单验证的结果
+               if(valid){
+                    // this.$store.dispath用于调运actions的方法
+                    const res = await this.$store.dispatch("user/login", this.form)
 
-          if (res.status === 200) {
-            this.$message.success("登录成功");
-
-            this.$router.push("/")
-
-            const data = res.data;
-            // 把用户信息token保存到本地，在头部组件中显示用户数据
-            // vuex不能通过直接复制方式来修改state的值
-            // this.$store.state.user.username = data.user.nickname;
-            // 通过调用mutation下的方法修改state的值，commit方法调用mutation的方法
-            // 非常类似于$store
-            this.$store.commit("user/setUserInfo",data)
-
-          }
+                    if(res.status === 200){
+                        this.$message.success("登录成功");
+                        this.$router.back("/")
+                    }
+               }
+           })
         }
-      });
-    }
   }
 };
 </script>

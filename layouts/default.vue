@@ -22,7 +22,7 @@ export default {
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',

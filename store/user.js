@@ -1,6 +1,8 @@
 // 固定的写法，暴露出state
-export const state = {
-    userInfo: {}
+export const state = () => {
+    return {
+        userInfo: {}
+    }
 }
 
 // 存放的是同步修改state的方法
@@ -12,7 +14,34 @@ export const mutations = {
     }
 }
 
-
-
 // 存放的是异步修改state的方法
-export const actions = {}
+export const actions = {
+    // 封装登录的方法
+    // store是固定必须要有的参数，执行当前的store == 组件内this.$store
+    async login(store, data){
+        var res = await this.$axios({
+            url: "/accounts/login",
+            method: "POST",
+            data
+        })
+
+        if(res.status === 200){
+            store.commit("setUserInfo", res.data);
+        }
+
+        return res;
+    },
+
+    // 发送手机验证码, tel是传入的手机号码
+    async sendCaptcha(store, tel){
+        const res = await this.$axios({
+            url: "/captchas",
+            method: "POST",
+            data: {
+                tel // 手机号码
+            }
+        });
+
+        return res;
+    }
+}
